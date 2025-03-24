@@ -65,7 +65,7 @@ st.markdown('<img src="YOUR_GIF_IMAGE_URL.gif" width="200" style="display: block
 # --- Layout ของหน้า UI ---
 col1, col2, col3 = st.columns([1, 2, 1])
 
- with col2:
+with col2:
     # --- Pomodoro Timer ---
     with st.container():
         st.subheader("Pomodoro Timer")
@@ -75,23 +75,24 @@ col1, col2, col3 = st.columns([1, 2, 1])
 
         if st.button("Start Pomodoro (25 min)"):
             st.session_state["end_time"] = time.time() + (25 * 60)
-            st.rerun()
 
         if st.button("Reset Pomodoro"):
             st.session_state["end_time"] = 0
-            st.rerun()
 
-        if st.session_state["end_time"] > time.time():
+        timer_placeholder = st.empty()  # สร้าง placeholder สำหรับแสดงเวลา
+
+        while st.session_state["end_time"] > time.time():
             remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
-            st.write(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
+            timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
             time.sleep(1)
-            st.rerun()
-        elif st.session_state["end_time"] != 0:
+
+        if st.session_state["end_time"] != 0 and time.time() >= st.session_state["end_time"]:
             st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
             st.session_state["end_time"] = 0
-
+            timer_placeholder.empty() # ลบ placeholder เมื่อ Pomodoro เสร็จสิ้น
+     
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
     mood = st.selectbox("วันนี้คุณรู้สึกอย่างไร?", [" Happy", " Neutral", " Sad", " Anxious"])
