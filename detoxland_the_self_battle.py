@@ -66,45 +66,78 @@ with col2:
     if "end_time" in st.session_state:
         remaining_time = st.session_state["end_time"] - time.time()
         if remaining_time > 0:
-            st.info(f"⏳ เวลาที่เหลือ: {int(remaining_time // 60)} นาที {int(remaining_time % 60)} วินาที")
+            minutes = int(remaining_time // 60)
+            seconds = int(remaining_time % 60)
+            st.info(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
         else:
             st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-            st.write("พักสักหน่อย! ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน") # Quote หลังจบ Pomodoro
+            quotes = [
+                "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
+                "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
+                "อย่ากลัวที่จะเริ่มต้นใหม่",
+                "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
+            ]
+            st.write(random.choice(quotes))
 
+    # ปุ่ม Reset Pomodoro
+    if st.button("Reset Pomodoro"):
+        st.session_state["pomodoro_count"] = 0
+        st.info("Pomodoro ถูกรีเซ็ตแล้ว")
     # แสดงจำนวนครั้ง Pomodoro ที่ทำสำเร็จ
     st.info(f" คุณทำ Pomodoro สำเร็จไปแล้ว {st.session_state['pomodoro_count']} ครั้ง!")
 
-    # ระบบบันทึกอารมณ์ (Mental Health Tracker)
+  # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
     mood = st.selectbox("วันนี้คุณรู้สึกอย่างไร?", [" Happy", " Neutral", " Sad", " Anxious"])
 
-    # เปลี่ยนสีปุ่มตามอารมณ์
-    if mood == " Happy":
-        button_color = "yellow"
-    elif mood == " Sad":
-        button_color = "blue"
-        st.write("ไม่เป็นไรนะ ทุกอย่างจะดีขึ้นเอง") # ข้อความปลอบใจ
-    elif mood == " Anxious":
-        button_color = "orange"
-        st.write("หายใจเข้าลึก ๆ แล้วทุกอย่างจะดีขึ้น") # ข้อความให้กำลังใจ
-        # เพิ่มปุ่มเล่นเสียงปลอบใจ (ต้องมีไฟล์เสียง)
-        # st.audio("calming_sound.mp3")
+    # คลังข้อความปลอบโยนสำหรับแต่ละอารมณ์
+    mood_quotes = {
+        " Happy": [
+            " รอยยิ้มของคุณทำให้โลกสดใสขึ้นนะ!",
+            " มีความสุขแบบนี้ต่อไปนะ วันนี้เป็นวันที่ดี!",
+            " ขอให้ความสุขอยู่กับคุณเสมอ!"
+        ],
+        " Neutral": [
+            " วันธรรมดาก็มีความหมายเสมอ",
+            " บางครั้งแค่หายใจลึก ๆ ก็เพียงพอแล้ว",
+            " ใช้เวลานี้เป็นโอกาสให้ตัวเองได้พักใจ"
+        ],
+        " Sad": [
+            " ไม่เป็นไรนะ คุณไม่ได้อยู่คนเดียว",
+            " อารมณ์เศร้าเป็นแค่ส่วนหนึ่งของชีวิต เดี๋ยวมันจะผ่านไป",
+            "️ ฝนตกแล้ว เดี๋ยวก็มีสายรุ้งตามมา"
+        ],
+        " Anxious": [
+            " ลองหายใจเข้าลึก ๆ แล้วค่อย ๆ ผ่อนคลายนะ",
+            "☁️ ทุกความกังวลล้วนมีจุดสิ้นสุด เชื่อเถอะว่าคุณจะผ่านมันไปได้",
+            " ลองนึกถึงทะเลที่เงียบสงบแล้วให้ความเครียดไหลออกไป"
+        ]
+    }
+
+    # สีปุ่มและข้อความตามอารมณ์
+    mood_styles = {
+        " Happy": {"color": "#FFD700", "text": "✨ วันนี้สดใส! มาลุยกันเถอะ!"},
+        " Neutral": {"color": "#A9A9A9", "text": "⏳ ค่อย ๆ ไป ไม่ต้องรีบ"},
+        " Sad": {"color": "#4682B4", "text": " พักสักหน่อยแล้วค่อยเริ่มใหม่"},
+        " Anxious": {"color": "#FF6347", "text": " ลองสูดหายใจลึก ๆ ก่อนเริ่มงาน"}
+    }
 
     # ปรับแต่งปุ่มบันทึกอารมณ์ด้วย HTML/CSS
     if st.markdown(f"""
         <style>
         .stButton>button {{
-            background-color: {button_color};
-            color: white;
+            background-color: {mood_styles[mood]['color']};
+            color: black;
             padding: 10px 20px;
             border-radius: 5px;
             border: none;
         }}
         </style>
-        <button>บันทึกอารมณ์</button>
+        <button>{mood_styles[mood]['text']}</button>
     """, unsafe_allow_html=True):
-        st.success("✅ บันทึกอารมณ์สำเร็จ!")
-
+        comforting_message = random.choice(mood_quotes[mood])
+        st.success(f"✅ บันทึกอารมณ์สำเร็จ! \n\n {comforting_message}")
+        
     # ฟีเจอร์จัดการอาการแพนิค
     st.subheader(" จัดการอาการแพนิค")
     panic_option = st.selectbox("เลือกอาการแพนิค:",
