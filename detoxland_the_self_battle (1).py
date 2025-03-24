@@ -56,7 +56,7 @@ st.markdown('''
 # --- Header ---
 st.markdown('<p class="big-title">Detoxland: The Self Battle</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">ช่วยให้คุณโฟกัสและลดการใช้โซเชียลมีเดียอย่างมีสุขภาพจิตที่ดี</p>', unsafe_allow_html=True)
-st.markdown('<img src="YOUR_GIF_IMAGE_URL.gif" width="200" style="display: block; margin-left: auto; margin-right: auto;">', unsafe_allow_html=True) # เพิ่ม GIF
+# st.markdown('<img src="YOUR_GIF_IMAGE_URL.gif" width="200" style="display: block; margin-left: auto; margin-right: auto;">', unsafe_allow_html=True) # เพิ่ม GIF
 
 # --- Layout ของหน้า UI ---
 col1, col2, col3 = st.columns([1, 2, 1])
