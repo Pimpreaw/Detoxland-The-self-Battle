@@ -84,13 +84,18 @@ with col2:
 
     # แสดงเวลาที่เหลือ
     if "end_time" in st.session_state:
-        remaining_time = st.session_state["end_time"] - time.time()
-        if remaining_time > 0:
+    remaining_time = st.session_state["end_time"] - time.time()
+    if remaining_time > 0:
+        timer_placeholder = st.empty()  # สร้าง placeholder
+        while remaining_time > 0:
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
-            st.info(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
-        else:
-            st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
+            timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")  # อัปเดต placeholder
+            time.sleep(1)  # หน่วงเวลา 1 วินาที
+            remaining_time = st.session_state["end_time"] - time.time()
+        st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
+    else:
+        st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
             quotes = [
                 "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
                 "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
@@ -100,11 +105,9 @@ with col2:
             st.write(random.choice(quotes))
 
     # ปุ่ม Reset Pomodoro
-    if st.button("Reset Pomodoro"):
-        st.session_state["pomodoro_count"] = 0
-        st.info("Pomodoro ถูกรีเซ็ตแล้ว")
-    # แสดงจำนวนครั้ง Pomodoro ที่ทำสำเร็จ
-    st.info(f" คุณทำ Pomodoro สำเร็จไปแล้ว {st.session_state['pomodoro_count']} ครั้ง!")
+ if st.button("Reset Pomodoro"):
+    st.session_state["end_time"] = 0  # รีเซ็ตเวลา
+    st.info("Pomodoro ถูกรีเซ็ตแล้ว")
 
   # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
