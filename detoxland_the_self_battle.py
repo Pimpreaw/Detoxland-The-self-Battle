@@ -65,29 +65,22 @@ st.markdown('<img src="YOUR_GIF_IMAGE_URL.gif" width="200" style="display: block
 # --- Layout ของหน้า UI ---
 col1, col2, col3 = st.columns([1, 2, 1])
 
-with col2:
+ with col2:
     # --- Pomodoro Timer ---
     with st.container():
-        # --- ตั้งค่า Pomodoro ---
+        st.subheader("Pomodoro Timer")
+
         if "end_time" not in st.session_state:
             st.session_state["end_time"] = 0
 
-        # --- ฟังก์ชันนับเวลาถอยหลัง ---
-        def pomodoro_timer(duration_minutes):
-            st.session_state["end_time"] = time.time() + (duration_minutes * 60)
-
-        # --- UI Pomodoro ---
-        st.subheader("Pomodoro Timer")
         if st.button("Start Pomodoro (25 min)"):
-            pomodoro_timer(25)
+            st.session_state["end_time"] = time.time() + (25 * 60)
             st.rerun()
 
         if st.button("Reset Pomodoro"):
             st.session_state["end_time"] = 0
-            st.info("Pomodoro ถูกรีเซ็ตแล้ว")
             st.rerun()
 
-        # --- แสดงเวลานับถอยหลัง ---
         if st.session_state["end_time"] > time.time():
             remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
@@ -98,7 +91,7 @@ with col2:
         elif st.session_state["end_time"] != 0:
             st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
             st.session_state["end_time"] = 0
-        
+
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
     mood = st.selectbox("วันนี้คุณรู้สึกอย่างไร?", [" Happy", " Neutral", " Sad", " Anxious"])
