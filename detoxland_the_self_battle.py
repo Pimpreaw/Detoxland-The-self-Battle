@@ -11,6 +11,7 @@ Original file is located at
 
 import streamlit as st
 import time
+import random 
 
 # --- ตั้งค่า UI ---
 st.set_page_config(page_title="Detoxland: The Self Battle", page_icon="", layout="wide")
@@ -126,17 +127,17 @@ with col2:
     if st.markdown(f"""
         <style>
         .stButton>button {{
-            background-color: {mood_styles[mood]['color']};
+            background-color: {mood_styles.get(mood, {}).get('color', 'lightgray')};
             color: black;
             padding: 10px 20px;
             border-radius: 5px;
             border: none;
         }}
         </style>
-        <button>{mood_styles[mood]['text']}</button>
+        <button>{mood_styles.get(mood, {}).get('text', 'บันทึกอารมณ์')}</button>
     """, unsafe_allow_html=True):
-        comforting_message = random.choice(mood_quotes[mood])
-        st.success(f"✅ บันทึกอารมณ์สำเร็จ! \n\n {comforting_message}")
+        comforting_message = random.choice(mood_quotes.get(mood, [""]))
+        st.write(f"✅ บันทึกอารมณ์สำเร็จ! \n\n {comforting_message}")
         
     # ฟีเจอร์จัดการอาการแพนิค
     st.subheader(" จัดการอาการแพนิค")
