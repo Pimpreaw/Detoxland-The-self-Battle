@@ -69,46 +69,56 @@ with col2:
     with st.container():
         st.subheader("Pomodoro Timer")
 
+        if "pomodoro_intention" not in st.session_state:
+            st.session_state["pomodoro_intention"] = ""
         if "end_time" not in st.session_state:
             st.session_state["end_time"] = 0
         if "pomodoro_running" not in st.session_state:
             st.session_state["pomodoro_running"] = False
 
+        st.session_state["pomodoro_intention"] = st.text_input("ความตั้งใจ/เป้าหมายด้านอารมณ์สำหรับช่วงเวลานี้คืออะไร?", st.session_state["pomodoro_intention"])
+
         def start_pomodoro():
-            st.session_state["end_time"] = time.time() + (25 * 60)
-            st.session_state["pomodoro_running"] = True
+            if st.session_state["pomodoro_intention"] != "":
+                st.session_state["end_time"] = time.time() + (25 * 60)
+                st.session_state["pomodoro_running"] = True
+            else:
+                st.warning("ลองตั้งความตั้งใจด้านอารมณ์ก่อนเริ่ม Pomodoro นะคะ")
 
         def reset_pomodoro():
             st.session_state["end_time"] = 0
             st.session_state["pomodoro_running"] = False
+            st.session_state["pomodoro_intention"] = ""
 
-        if st.button("Start Pomodoro (25 min)", key="start_pomodoro", type="primary", use_container_width=True, className="button-style", on_click=start_pomodoro):
-            pass # การกระทำจะอยู่ในฟังก์ชัน start_pomodoro
+        if not st.session_state["pomodoro_running"]:
+            st.button("Start Focus", key="start_pomodoro", type="primary", use_container_width=True, className="button-style", on_click=start_pomodoro)
+        else:
+            st.write(f"ความตั้งใจ: {st.session_state['pomodoro_intention']}")
 
-        if st.button("Reset Pomodoro", key="reset_pomodoro", use_container_width=True, className="button-style", on_click=reset_pomodoro):
-            pass # การกระทำจะอยู่ในฟังก์ชัน reset_pomodoro
+        timer_placeholder = st.empty()
 
-        timer_placeholder = st.empty()  # สร้าง placeholder สำหรับแสดงเวลา
-
-        if st.session_state["pomodoro_running"]:
-            if st.session_state["end_time"] > time.time():
-                remaining_time = st.session_state["end_time"] - time.time()
-                minutes = int(remaining_time // 60)
-                seconds = int(remaining_time % 60)
-                timer_placeholder.markdown(f"⏳ เวลาที่เหลือ: **{minutes:02d}:{seconds:02d}**")
-                time.sleep(1) # หน่วงเวลา 1 วินาที
-                st.rerun() # สั่งให้ Streamlit รันใหม่เพื่ออัปเดตเวลา
-            else:
-                st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-                st.session_state["pomodoro_running"] = False
-                st.session_state["end_time"] = 0
-                timer_placeholder.empty() # ลบ placeholder เมื่อ Pomodoro เสร็จสิ้น
-        elif st.session_state["end_time"] > time.time() and not st.session_state["pomodoro_running"]:
-            # กรณีที่ end_time ถูกตั้งไว้แล้ว แต่ pomodoro_running เป็น False (เช่น หลังรีเซ็ต)
+        if st.session_state["end_time"] > time.time() and st.session_state["pomodoro_running"]:
             remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
             timer_placeholder.markdown(f"⏳ เวลาที่เหลือ: **{minutes:02d}:{seconds:02d}**")
+            time.sleep(1)
+            st.rerun()
+        elif st.session_state["end_time"] != 0 and time.time() >= st.session_state["end_time"] and st.session_state["pomodoro_running"]:
+            st.success(" Pomodoro เสร็จแล้ว!")
+            st.session_state["pomodoro_running"] = False
+            st.session_state["end_time"] = 0
+            st.session_state["pomodoro_intention_after"] = st.selectbox("หลังโฟกัส คุณรู้สึกอย่างไร?", ["ดีขึ้น", "เหมือนเดิม", "แย่ลง"])
+            st.write(f"คุณรู้สึก: **{st.session_state['pomodoro_intention_after']}**")
+            if st.button("ไปยังส่วนบันทึกอารมณ์", key="go_to_mood"):
+                # ในส่วนนี้คุณอาจจะต้องใช้ st.experimental_set_query_params เพื่อนำทางไปยังส่วนอื่นของแอปพลิเคชัน
+                st.write(" (กำลังนำทางไปยังส่วนบันทึกอารมณ์...) ")
+            st.button("เริ่ม Pomodoro ใหม่", key="start_new_pomodoro", on_click=reset_pomodoro)
+        elif st.session_state["pomodoro_running"] == False and st.session_state["end_time"] != 0:
+             st.button("เริ่ม Pomodoro ใหม่", key="start_new_pomodoro", on_click=reset_pomodoro)
+
+        if st.session_state["pomodoro_running"]:
+             st.button("Reset Pomodoro", key="reset_pomodoro", use_container_width=True, className="button-style", on_click=reset_pomodoro)
 			
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
