@@ -71,28 +71,45 @@ with col2:
 
         if "end_time" not in st.session_state:
             st.session_state["end_time"] = 0
+        if "pomodoro_running" not in st.session_state:
+            st.session_state["pomodoro_running"] = False
 
-        if st.button("Start Pomodoro (25 min)", key="start_pomodoro", type="primary", use_container_width=True, className="button-style"):
+        def start_pomodoro():
             st.session_state["end_time"] = time.time() + (25 * 60)
+            st.session_state["pomodoro_running"] = True
 
-        if st.button("Reset Pomodoro", key="reset_pomodoro", use_container_width=True, className="button-style"):
+        def reset_pomodoro():
             st.session_state["end_time"] = 0
+            st.session_state["pomodoro_running"] = False
+
+        if st.button("Start Pomodoro (25 min)", key="start_pomodoro", type="primary", use_container_width=True, className="button-style", on_click=start_pomodoro):
+            pass # การกระทำจะอยู่ในฟังก์ชัน start_pomodoro
+
+        if st.button("Reset Pomodoro", key="reset_pomodoro", use_container_width=True, className="button-style", on_click=reset_pomodoro):
+            pass # การกระทำจะอยู่ในฟังก์ชัน reset_pomodoro
 
         timer_placeholder = st.empty()  # สร้าง placeholder สำหรับแสดงเวลา
 
-        if st.session_state["end_time"] > time.time() and st.session_state["end_time"] != 0:
+        if st.session_state["pomodoro_running"]:
+            if st.session_state["end_time"] > time.time():
+                remaining_time = st.session_state["end_time"] - time.time()
+                minutes = int(remaining_time // 60)
+                seconds = int(remaining_time % 60)
+                timer_placeholder.markdown(f"⏳ เวลาที่เหลือ: **{minutes:02d}:{seconds:02d}**")
+                time.sleep(1) # หน่วงเวลา 1 วินาที
+                st.rerun() # สั่งให้ Streamlit รันใหม่เพื่ออัปเดตเวลา
+            else:
+                st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
+                st.session_state["pomodoro_running"] = False
+                st.session_state["end_time"] = 0
+                timer_placeholder.empty() # ลบ placeholder เมื่อ Pomodoro เสร็จสิ้น
+        elif st.session_state["end_time"] > time.time() and not st.session_state["pomodoro_running"]:
+            # กรณีที่ end_time ถูกตั้งไว้แล้ว แต่ pomodoro_running เป็น False (เช่น หลังรีเซ็ต)
             remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
             timer_placeholder.markdown(f"⏳ เวลาที่เหลือ: **{minutes:02d}:{seconds:02d}**")
-            time.sleep(0.1) # ลดเวลา sleep เพื่อไม่ให้บล็อกนานเกินไป
-            st.rerun()  # บังคับให้ Streamlit รันใหม่
-
-        elif st.session_state["end_time"] != 0 and time.time() >= st.session_state["end_time"]:
-            st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-            st.session_state["end_time"] = 0
-            timer_placeholder.empty() # ลบ placeholder เมื่อ Pomodoro เสร็จสิ้น
-
+			
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
     mood = st.selectbox("วันนี้คุณรู้สึกอย่างไร?", [" Happy", " Neutral", " Sad", " Anxious"])
