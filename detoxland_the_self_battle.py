@@ -86,7 +86,7 @@ with col2:
             seconds = int(remaining_time % 60)
             timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
             if time.time() < st.session_state["end_time"]:
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
                 quotes = [
