@@ -83,9 +83,10 @@ with col2:
         st.success("✅ Pomodoro เริ่มแล้ว! ตั้งใจทำงานนะ ")
 
     # แสดงเวลาที่เหลือ
-    if "end_time" in st.session_state:
-    remaining_time = st.session_state["end_time"] - time.time()
-    if remaining_time > 0:
+# แสดงเวลาที่เหลือ
+if "end_time" in st.session_state:
+    remaining_time = st.session_state["end_time"] - time.time() #บรรทัด 87 ต้องเยื้อง
+    if remaining_time > 0: #บรรทัด 86 ต้องมีโค๊ดเยื้องตาม
         timer_placeholder = st.empty()  # สร้าง placeholder
         while remaining_time > 0:
             minutes = int(remaining_time // 60)
