@@ -26,28 +26,26 @@ st.markdown(
 st.markdown('''
     <style>
     body {
-        background-color: #a9b665; /* สีเบจเขียวเข้มแบบธรรมชาติ */
-        /* background-image: url('YOUR_PASTEL_BACKGROUND_IMAGE_URL.png'); /* ลบหรือแทนที่ URL ภาพพื้นหลัง PNG */
-        background-size: cover;
-        background-position: center;
+        background-color: #f0f8ff; /* สีฟ้าอ่อน */
     }
     .big-title {
         font-size: 250px;
         font-weight: bold;
-        color: #8fbc8f; /* สีเขียวอ่อน */
+        color: #4682b4; /* สีน้ำเงิน */
+        text-shadow: 2px 2px #87ceeb; /* เพิ่มเงา */
     }
     .sub-title {
         font-size: 20px;
-        color: #556b2f; /* สีเขียวเข้ม */
+        color: #2e8b57; /* สีเขียวเข้ม */
     }
     .button-style {
-        background-color: #8fbc8f; /* สีเขียวอ่อน */
-        color: white;
+        background-color: #ffa07a; /* สีส้มอ่อน */
+        color: #fff;
         padding: 15px 25px;
         font-size: 18px;
         border-radius: 10px;
-        border: none;
-        cursor: pointer;
+        border: 1px solid #ff7f50; /* เพิ่มขอบ */
+        box-shadow: 3px 3px #d3d3d3; /* เพิ่มเงา */
         display: block; /* จัดปุ่มให้อยู่ตรงกลางด้วย */
         margin-left: auto;
         margin-right: auto;
