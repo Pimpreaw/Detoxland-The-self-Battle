@@ -81,14 +81,15 @@ with col2:
 
         timer_placeholder = st.empty()  # สร้าง placeholder สำหรับแสดงเวลา
 
-        while st.session_state["end_time"] > time.time():
+        if st.session_state["end_time"] > time.time() and st.session_state["end_time"] != 0:
             remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
             timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
             time.sleep(1)
+            st.rerun()  # บังคับให้ Streamlit รันใหม่
 
-        if st.session_state["end_time"] != 0 and time.time() >= st.session_state["end_time"]:
+        elif st.session_state["end_time"] != 0 and time.time() >= st.session_state["end_time"]:
             st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
             st.session_state["end_time"] = 0
             timer_placeholder.empty() # ลบ placeholder เมื่อ Pomodoro เสร็จสิ้น
