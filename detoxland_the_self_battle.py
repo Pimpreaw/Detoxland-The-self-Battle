@@ -16,6 +16,25 @@ import random
 # --- ตั้งค่า UI ---
 st.set_page_config(page_title="Detoxland: The Self Battle", page_icon="", layout="wide")
 
+# --- แทรกฟอนต์ Kanit และจัดข้อความตรงกลาง ---
+st.markdown(
+    """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap');
+
+    html, body, [class*="st-"] {
+        font-family: 'Kanit', sans-serif;
+        text-align: center; /* จัดข้อความตรงกลาง */
+    }
+
+    h1, h2, h3 {
+        font-family: 'Kanit', sans-serif;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- CSS สำหรับตกแต่ง ---
 st.markdown('''
     <style>
