@@ -111,9 +111,10 @@ with col2:
             st.write(random.choice(quotes))
 
     # ปุ่ม Reset Pomodoro
-    if st.button("Reset Pomodoro"):
-        st.session_state["end_time"] = 0  # รีเซ็ตเวลา
-        st.info("Pomodoro ถูกรีเซ็ตแล้ว")
+    if "end_time" in st.session_state and st.session_state["end_time"] == 0:  # เพิ่มเงื่อนไข
+        if st.button("Reset Pomodoro"):
+            st.session_state["end_time"] = 0  # รีเซ็ตเวลา
+            st.info("Pomodoro ถูกรีเซ็ตแล้ว")
 
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
