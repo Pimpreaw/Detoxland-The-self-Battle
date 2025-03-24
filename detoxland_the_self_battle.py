@@ -35,7 +35,7 @@ st.markdown('''
         background-position: center;
     }
     .big-title {
-        font-size: 80px;
+        font-size: 250px;
         font-weight: bold;
         color: #8fbc8f; /* สีเขียวอ่อน */
         text-align: center;
