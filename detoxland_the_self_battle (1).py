@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1bLyXZeLcsd-APCkHZEpTzGBfTkSE7IWV
 """
 
-!pip install streamlit
+# !pip install streamlit
 
 # -*- coding: utf-8 -*-
 """Detoxland: The self battle"""
