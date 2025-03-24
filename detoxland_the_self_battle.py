@@ -81,41 +81,41 @@ with col2:
         st.session_state["pomodoro_count"] += 1
         st.success("✅ Pomodoro เริ่มแล้ว! ตั้งใจทำงานนะ ")
 
-    # แสดงเวลาที่เหลือ
-    if "end_time" in st.session_state:
-        remaining_time = st.session_state["end_time"] - time.time()
-        if remaining_time > 0:
-            timer_placeholder = st.empty()  # สร้าง placeholder
-            while remaining_time > 0:
-                minutes = int(remaining_time // 60)
-                seconds = int(remaining_time % 60)
-                timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")  # อัปเดต placeholder
-                time.sleep(1)  # หน่วงเวลา 1 วินาที
-                remaining_time = st.session_state["end_time"] - time.time()
-            st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-            quotes = [
-                "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
-                "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
-                "อย่ากลัวที่จะเริ่มต้นใหม่",
-                "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
-            ]
-            st.write(random.choice(quotes))
-        else:
-            st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-            quotes = [
-                "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
-                "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
-                "อย่ากลัวที่จะเริ่มต้นใหม่",
-                "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
-            ]
-            st.write(random.choice(quotes))
+ 
+# แสดงเวลาที่เหลือ
+if "end_time" in st.session_state:
+    remaining_time = st.session_state["end_time"] - time.time()
+    if remaining_time > 0:
+        timer_placeholder = st.empty()  # สร้าง placeholder
+        while remaining_time > 0:
+            minutes = int(remaining_time // 60)
+            seconds = int(remaining_time % 60)
+            timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")  # อัปเดต placeholder
+            time.sleep(1)  # หน่วงเวลา 1 วินาที
+            remaining_time = st.session_state["end_time"] - time.time()
+        st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
+        quotes = [
+            "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
+            "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
+            "อย่ากลัวที่จะเริ่มต้นใหม่",
+            "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
+        ]
+        st.write(random.choice(quotes))
+    else:
+        st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
+        quotes = [
+            "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
+            "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
+            "อย่ากลัวที่จะเริ่มต้นใหม่",
+            "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
+        ]
+        st.write(random.choice(quotes))
 
-    # ปุ่ม Reset Pomodoro
-    if "end_time" in st.session_state and st.session_state["end_time"] == 0:  # เพิ่มเงื่อนไข
-        if st.button("Reset Pomodoro"):
-            st.session_state["end_time"] = 0  # รีเซ็ตเวลา
-            st.info("Pomodoro ถูกรีเซ็ตแล้ว")
-
+# ปุ่ม Reset Pomodoro (แสดงผลตลอดเวลา)
+if st.button("Reset Pomodoro"):
+    st.session_state["end_time"] = 0  # รีเซ็ตเวลา
+    st.info("Pomodoro ถูกรีเซ็ตแล้ว")
+    
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
     mood = st.selectbox("วันนี้คุณรู้สึกอย่างไร?", [" Happy", " Neutral", " Sad", " Anxious"])
