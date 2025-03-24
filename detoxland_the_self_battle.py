@@ -66,50 +66,37 @@ st.markdown('<img src="YOUR_GIF_IMAGE_URL.gif" width="200" style="display: block
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
-    # ... (โค้ดส่วนอื่นๆ) ...
-    # เริ่มนับ Pomodoro ครั้งแรก
-    if "pomodoro_count" not in st.session_state:
-        st.session_state["pomodoro_count"] = 0
+    # --- Pomodoro Timer ---
+    if "end_time" not in st.session_state:
+        st.session_state["end_time"] = 0
 
-    # ปุ่มเริ่ม Pomodoro Timer
-    if st.button("⏳ Start Pomodoro (25 min)", key="pomodoro"):
-        st.session_state["end_time"] = time.time() + (25 * 60)
-        st.session_state["pomodoro_count"] += 1
-        st.success("✅ Pomodoro เริ่มแล้ว! ตั้งใจทำงานนะ ")
+    def pomodoro_timer(duration_minutes):
+        st.session_state["end_time"] = time.time() + (duration_minutes * 60)
+        timer_placeholder = st.empty()
 
-    # แสดงเวลาที่เหลือ
-    if "end_time" in st.session_state:
-        remaining_time = st.session_state["end_time"] - time.time()
-        if remaining_time > 0:
-            timer_placeholder = st.empty()
+        while st.session_state["end_time"] > time.time():
+            remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
             timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
-            if time.time() < st.session_state["end_time"]:
-                st.rerun()
-            else:
-                st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-                quotes = [
-                    "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
-                    "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
-                    "อย่ากลัวที่จะเริ่มต้นใหม่",
-                    "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
-                ]
-                st.write(random.choice(quotes))
-        else:
-            st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
-            quotes = [
-                "ความสำเร็จมาจากก้าวเล็ก ๆ ในแต่ละวัน",
-                "วันนี้อาจเป็นวันที่ดีที่สุดของคุณ",
-                "อย่ากลัวที่จะเริ่มต้นใหม่",
-                "ความสุขอยู่ในสิ่งเล็ก ๆ น้อย ๆ"
-            ]
-            st.write(random.choice(quotes))
+            time.sleep(1)
 
-    # ปุ่ม Reset Pomodoro (แสดงผลตลอดเวลา)
+        st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
+
+    st.subheader("Pomodoro Timer")
+    if st.button("Start Pomodoro (25 min)"):
+        pomodoro_timer(25)
+
     if st.button("Reset Pomodoro"):
         st.session_state["end_time"] = 0
         st.info("Pomodoro ถูกรีเซ็ตแล้ว")
+        st.rerun()
+
+    if st.session_state["end_time"] > time.time():
+        remaining_time = st.session_state["end_time"] - time.time()
+        minutes = int(remaining_time // 60)
+        seconds = int(remaining_time % 60)
+        st.write(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
 
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
