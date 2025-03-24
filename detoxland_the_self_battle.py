@@ -29,21 +29,24 @@ st.markdown(
 st.markdown('''
     <style>
     body {
-        background-color: #f4f4f4;
+        background-color: #f5f5dc; /* สีเบจ */
+        background-image: url('YOUR_PASTEL_BACKGROUND_IMAGE_URL.png'); /* เพิ่ม URL ภาพพื้นหลัง PNG */
+        background-size: cover;
+        background-position: center;
     }
     .big-title {
-        font-size: 40px;
+        font-size: 80px;
         font-weight: bold;
-        color: #4CAF50;
+        color: #8fbc8f; /* สีเขียวอ่อน */
         text-align: center;
     }
     .sub-title {
         font-size: 20px;
-        color: #555;
+        color: #556b2f; /* สีเขียวเข้ม */
         text-align: center;
     }
     .button-style {
-        background-color: #4CAF50;
+        background-color: #8fbc8f; /* สีเขียวอ่อน */
         color: white;
         padding: 15px 25px;
         font-size: 18px;
@@ -57,11 +60,13 @@ st.markdown('''
 # --- Header ---
 st.markdown('<p class="big-title">Detoxland: The Self Battle</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">ช่วยให้คุณโฟกัสและลดการใช้โซเชียลมีเดียอย่างมีสุขภาพจิตที่ดี</p>', unsafe_allow_html=True)
+st.markdown('<img src="YOUR_GIF_IMAGE_URL.gif" width="200" style="display: block; margin-left: auto; margin-right: auto;">', unsafe_allow_html=True) # เพิ่ม GIF
 
 # --- Layout ของหน้า UI ---
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
+    # ... (โค้ดส่วนอื่นๆ) ...
     # เริ่มนับ Pomodoro ครั้งแรก
     if "pomodoro_count" not in st.session_state:
         st.session_state["pomodoro_count"] = 0
