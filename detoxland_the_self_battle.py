@@ -13,12 +13,9 @@ st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap');
-    html, body, [class*="st-"] {
-        font-family: 'Kanit', sans-serif;
-        text-align: center;
-    }
-    h1, h2, h3 {
-        font-family: 'Kanit', sans-serif;
+    html, body, [class*="st-"], p, span, div, h1, h2, h3, h4, h5, h6 { /* เพิ่ม selector อื่นๆ */
+        font-family: 'Kanit', sans-serif !important; /* เพิ่ม !important เพื่อให้มีผล */
+        text-align: center !important; /* เพิ่ม !important เพื่อให้มีผล */
     }
     </style>
     """,
@@ -29,8 +26,8 @@ st.markdown(
 st.markdown('''
     <style>
     body {
-        background-color: #f5f5dc; /* สีเบจ */
-        background-image: url('YOUR_PASTEL_BACKGROUND_IMAGE_URL.png'); /* เพิ่ม URL ภาพพื้นหลัง PNG */
+        background-color: #a9b665; /* สีเบจเขียวเข้มแบบธรรมชาติ */
+        /* background-image: url('YOUR_PASTEL_BACKGROUND_IMAGE_URL.png'); /* ลบหรือแทนที่ URL ภาพพื้นหลัง PNG */
         background-size: cover;
         background-position: center;
     }
@@ -38,12 +35,10 @@ st.markdown('''
         font-size: 250px;
         font-weight: bold;
         color: #8fbc8f; /* สีเขียวอ่อน */
-        text-align: center;
     }
     .sub-title {
         font-size: 20px;
         color: #556b2f; /* สีเขียวเข้ม */
-        text-align: center;
     }
     .button-style {
         background-color: #8fbc8f; /* สีเขียวอ่อน */
@@ -53,7 +48,11 @@ st.markdown('''
         border-radius: 10px;
         border: none;
         cursor: pointer;
+        display: block; /* จัดปุ่มให้อยู่ตรงกลางด้วย */
+        margin-left: auto;
+        margin-right: auto;
     }
+    .st-emotion-cache- {} /* แก้ปัญหาการจัดกึ่งกลางของบาง elements ใน Streamlit */
     </style>
 ''', unsafe_allow_html=True)
 
@@ -73,10 +72,10 @@ with col2:
         if "end_time" not in st.session_state:
             st.session_state["end_time"] = 0
 
-        if st.button("Start Pomodoro (25 min)"):
+        if st.button("Start Pomodoro (25 min)", key="start_pomodoro", type="primary", use_container_width=True, className="button-style"):
             st.session_state["end_time"] = time.time() + (25 * 60)
 
-        if st.button("Reset Pomodoro"):
+        if st.button("Reset Pomodoro", key="reset_pomodoro", use_container_width=True, className="button-style"):
             st.session_state["end_time"] = 0
 
         timer_placeholder = st.empty()  # สร้าง placeholder สำหรับแสดงเวลา
@@ -85,15 +84,15 @@ with col2:
             remaining_time = st.session_state["end_time"] - time.time()
             minutes = int(remaining_time // 60)
             seconds = int(remaining_time % 60)
-            timer_placeholder.text(f"⏳ เวลาที่เหลือ: {minutes:02d}:{seconds:02d}")
-            time.sleep(1)
+            timer_placeholder.markdown(f"⏳ เวลาที่เหลือ: **{minutes:02d}:{seconds:02d}**")
+            time.sleep(0.1) # ลดเวลา sleep เพื่อไม่ให้บล็อกนานเกินไป
             st.rerun()  # บังคับให้ Streamlit รันใหม่
 
         elif st.session_state["end_time"] != 0 and time.time() >= st.session_state["end_time"]:
             st.success(" Pomodoro เสร็จแล้ว! พักสักหน่อยนะ ️")
             st.session_state["end_time"] = 0
             timer_placeholder.empty() # ลบ placeholder เมื่อ Pomodoro เสร็จสิ้น
-     
+
     # ระบบบันทึกอารมณ์ (Mental Health Tracker)
     st.subheader(" บันทึกอารมณ์ของคุณวันนี้")
     mood = st.selectbox("วันนี้คุณรู้สึกอย่างไร?", [" Happy", " Neutral", " Sad", " Anxious"])
@@ -143,7 +142,7 @@ with col2:
     elif panic_option == "ฉันรู้สึกเหมือนหลุดออกจากโลกความจริง":
         st.write("ใช้ 5-4-3-2-1 technique: บอก 5 สิ่งที่เห็น, 4 สิ่งที่สัมผัส, 3 สิ่งที่ได้ยิน, 2 กลิ่นที่ได้กลิ่น, และ 1 สิ่งที่ได้ลิ้มรส")
 
-    if st.button("ยังไม่ดีขึ้น"):
+    if st.button("ยังไม่ดีขึ้น", key="panic_button", use_container_width=True, className="button-style"):
         st.write("หากอาการยังไม่ดีขึ้น โปรดติดต่อสายด่วนสุขภาพจิต 1323 หรือปรึกษาแพทย์และผู้เชี่ยวชาญด้านสุขภาพจิตในโรงพยาบาล")
 
     # แบบสอบถามวัดระดับอาการติดโซเชียล
@@ -159,11 +158,11 @@ with col2:
         "8. คุณเคยรู้สึกผิดหรือเสียใจหลังจากใช้โซเชียลมากเกินไปหรือไม่?",
         "9. คุณเคยหลีกเลี่ยงการพบปะคนจริง ๆ เพื่ออยู่กับโซเชียลหรือไม่?"
     ]
-    responses = []
-    for q in questions:
-        responses.append(st.radio(q, ["ใช่", "ไม่ใช่"], index=1))
+    responses =
+    for i, q in enumerate(questions):
+        responses.append(st.radio(q, ["ใช่", "ไม่ใช่"], index=1, key=f"question_{i}"))
 
-    if st.button(" วิเคราะห์ผล"):
+    if st.button(" วิเคราะห์ผล", key="analyze_button", use_container_width=True, className="button-style"):
         score = responses.count("ใช่")
         if score <= 1:
             st.success("คุณมีวินัยในการใช้โซเชียลได้ดีมาก! ลองแชร์เคล็ดลับให้เพื่อน ๆ บ้างนะ")
@@ -183,4 +182,3 @@ with col2:
 
 st.write("---")  # เส้นคั่น
 st.markdown("<p style='text-align: center;'> Detoxland ช่วยให้คุณลดความเครียดและโฟกัสกับชีวิตมากขึ้น</p>", unsafe_allow_html=True)
-
